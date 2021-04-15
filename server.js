@@ -49,6 +49,15 @@ const expressLayout = require('express-ejs-layouts');
 // use assets
 app.use(express.static('public'));
 
+app.use(express.json())
+
+// Global middleware
+app.use((req, res, next) => {
+    res.locals.session = req.session
+    res.locals.user = req.user
+    next()
+})
+
 // set template enginge
 app.use(expressLayout);
 app.set('views',path.join(__dirname,'/resources/views'));
