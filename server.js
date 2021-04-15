@@ -8,7 +8,8 @@ const PORT = process.env.PORT || 3000;
 app.get('/',(req,res)=>{
     res.render('home');
 })
-
+// use assets
+app.use(express.static('public'));
 
 // set template enginge
 app.use(expressLayout);
