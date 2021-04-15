@@ -1,9 +1,14 @@
+require('dotenv').config();
 const express = require('express');
 const  app = express();
 const  ejs = require('ejs');
 const  path = require('path');
+
 // Using Node.js `require()`
 const mongoose = require('mongoose');
+ const  session = require('express-session');
+ const flash = require('express-flash');
+ const MongoDbStore = require('connect-mongo');
 
 //Database connection
 const url= 'mongodb://127.0.0.1:27017/pizza';
@@ -19,6 +24,24 @@ connection.once('open', () => {
 }).catch(err => {
     console.log('Connection failed...')
 });
+
+
+//session store
+// Session store
+// let mongoStore = new MongoDbStore({
+//     mongooseConnection: connection,
+//     collection: 'sessions'
+// });
+
+//Session config
+app.use(session({
+    secret: process.env.COOKIE_SECRET,
+    store:MongoDbStore.create({mongoUrl:url,dbName: 'pizza'}),
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 } // 24 hour
+}))
+ app.use(flash());
 
 
 
